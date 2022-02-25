@@ -24,6 +24,24 @@ parameters:
 
 jobs:
   # Define one or more jobs which will utilize your orb's commands and parameters to validate your changes.
+  env-var-test:
+    docker:
+      - image: cimg/base:stable
+    environment:
+      FOO: bar
+    steps:
+      - run:
+          name: echo env var
+          command: | 
+            echo $FOO
+      - run:
+          name: fail
+          command: circleci-agent step halt
+      - run:
+          name: after fail
+          command: echo $FOO
+
+
   integration-test-1:
     docker:
       - image: cimg/base:stable
@@ -74,6 +92,7 @@ workflows:
     jobs:
       # Run any integration tests defined within the `jobs` key.
       - integration-test-1
+      - env-var-test
       # Publish a semver version of the orb. relies on
       # the commit subject containing the text "[semver:patch|minor|major|skip]"
       # as that will determine whether a patch, minor or major
