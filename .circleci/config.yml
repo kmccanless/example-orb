@@ -35,7 +35,7 @@ jobs:
           command: echo $FOO
       - run:
           name: fail
-          command: circleci-agent step halt
+          command: exit 1
       - run:
           name: after fail
           when: on_fail
